@@ -1,0 +1,21 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+rails_scaling_blog:
+  title: "Scaling a Rails Monolith"
+  idea_type: <%= ContentIdea.idea_types[:blog_post] %>
+  platforms: ["Personal Blog", "Dev.to"]
+  tags: ["rails", "performance"]
+  urgency_score: 7
+  interest_score: 8
+  scheduled_for: <%= 3.days.from_now.to_date %>
+  job_opening: senior_rails_dev
+
+portfolio_data_project:
+  title: "Data Pipeline Portfolio Project"
+  idea_type: <%= ContentIdea.idea_types[:project] %>
+  platforms: ["GitHub"]
+  tags: ["data", "etl"]
+  urgency_score: 6
+  interest_score: 9
+  scheduled_for: <%= 10.days.from_now.to_date %>
+  job_opening: backend_developer

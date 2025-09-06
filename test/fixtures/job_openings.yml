@@ -1,0 +1,45 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+senior_rails_dev:
+  title: "Senior Ruby on Rails Developer"
+  description: "Looking for an experienced Rails developer to join our growing team"
+  source: "LinkedIn"
+  tech_stack: "Ruby on Rails, PostgreSQL, React, Docker"
+  values: "Remote-first, work-life balance, continuous learning"
+  match_score: 85
+  interest_score: 90
+  is_public: true
+  company: tech_corp
+
+fullstack_engineer:
+  title: "Full Stack Engineer"
+  description: "Join our startup as a versatile full stack engineer"
+  source: "AngelList"
+  tech_stack: "Python, React, AWS, PostgreSQL"
+  values: "Innovation, fast-paced environment, equity"
+  match_score: 78
+  interest_score: 85
+  is_public: true
+  company: innovate_labs
+
+backend_developer:
+  title: "Backend Developer"
+  description: "Backend developer for data processing systems"
+  source: "Company Website"
+  tech_stack: "Java, Spring Boot, Kafka, Elasticsearch"
+  values: "Technical excellence, scalability, big data"
+  match_score: 72
+  interest_score: 65
+  is_public: false
+  company: data_flow
+
+tech_lead:
+  title: "Technical Lead"
+  description: "Lead a team of developers at TechCorp"
+  source: "Referral"
+  tech_stack: "Ruby on Rails, React, AWS, PostgreSQL"
+  values: "Leadership, mentoring, technical excellence"
+  match_score: 88
+  interest_score: 75
+  is_public: false
+  company: tech_corp

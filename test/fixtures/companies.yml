@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+tech_corp:
+  name: "TechCorp Solutions"
+  industry: "Technology"
+  website: "https://techcorp.com"
+  linkedin_url: "https://linkedin.com/company/techcorp"
+  notes: "Leading software development company"
+  tech_stack: "Ruby on Rails, React, PostgreSQL"
+
+innovate_labs:
+  name: "InnovateLabs"
+  industry: "Startup"
+  website: "https://innovatelabs.io"
+  linkedin_url: "https://linkedin.com/company/innovatelabs"
+  notes: "Fast-growing startup in AI/ML space"
+  tech_stack: "Python, TensorFlow, AWS"
+
+data_flow:
+  name: "DataFlow Systems"
+  industry: "Data Analytics"
+  website: "https://dataflow.systems"
+  linkedin_url: "https://linkedin.com/company/dataflow"
+  notes: "Enterprise data processing solutions"
+  tech_stack: "Java, Spark, Kafka, Elasticsearch"

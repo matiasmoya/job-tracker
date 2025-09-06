@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+first_round_rails_dev:
+  application_process: tech_corp_application
+  round_number: 1
+  interview_type: technical
+  scheduled_at: <%= 2.days.from_now %>
+  duration: 60
+  notes: "Focused on Rails architecture"
+
+second_round_rails_dev:
+  application_process: tech_corp_application
+  round_number: 2
+  interview_type: behavioral
+  scheduled_at: <%= 5.days.from_now %>
+  duration: 45
+  notes: "Team fit discussion"
+
+fullstack_first_round:
+  application_process: innovate_labs_application
+  round_number: 1
+  interview_type: technical
+  scheduled_at: <%= 1.day.from_now %>
+  duration: 90
+  notes: "Full stack assessment"

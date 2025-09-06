@@ -1,4 +1,5 @@
 import { ReactNode } from "react"
+import { router } from '@inertiajs/react'
 import { 
   Sidebar,
   SidebarContent,
@@ -22,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
+import { ThemeToggle } from "./ThemeToggle"
 import {
   LayoutDashboard,
   Building2,
@@ -72,6 +74,10 @@ const navItems = [
 ]
 
 export default function AppLayout({ children }: AppLayoutProps) {
+  const handleLogout = () => {
+    router.delete('/session')
+  }
+
   return (
     <SidebarProvider>
       <Sidebar>
@@ -127,7 +133,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Logout</span>
                 </DropdownMenuItem>
@@ -143,6 +149,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
             <Separator orientation="vertical" className="mr-2 h-4" />
           </div>
           <div className="ml-auto flex items-center gap-2 px-4">
+            <ThemeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="relative h-8 w-8 rounded-full">
@@ -157,7 +164,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
                   <Settings className="mr-2 h-4 w-4" />
                   <span>Settings</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Logout</span>
                 </DropdownMenuItem>

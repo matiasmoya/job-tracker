@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+john_recruiter:
+  name: "John Smith"
+  role: "Technical Recruiter"
+  email: "john.smith@techcorp.com"
+  linkedin_url: "https://linkedin.com/in/johnsmith"
+  notes: "Very responsive, knows the team well"
+  company: tech_corp
+
+sarah_manager:
+  name: "Sarah Johnson"
+  role: "Engineering Manager"
+  email: "sarah@innovatelabs.io"
+  linkedin_url: "https://linkedin.com/in/sarahjohnson"
+  notes: "Direct and technical, will be my potential manager"
+  company: innovate_labs
+
+mike_hr:
+  name: "Mike Wilson"
+  role: "HR Director"
+  email: "mike@dataflow.systems"
+  linkedin_url: ""
+  notes: "Initial contact through company website"
+  company: data_flow
