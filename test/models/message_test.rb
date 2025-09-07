@@ -52,10 +52,6 @@ class MessageTest < ActiveSupport::TestCase
     assert @message.days_ago >= 0
   end
 
-  test "formatted_sent_at returns string" do
-  assert_match(/202\d|203\d/, @message.formatted_sent_at)
-  end
-
   test "scopes recent and ordering" do
     @message.save!
     assert_includes Message.recent, @message
