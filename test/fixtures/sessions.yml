@@ -1,7 +1,0 @@
-one_session:
-  user: one
-  created_at: <%= 1.day.ago %>
-
-two_session:
-  user: two
-  created_at: <%= 2.days.ago %>
