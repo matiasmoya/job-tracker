@@ -24,9 +24,10 @@ interface Company {
 
 interface CompaniesTableProps {
   companies: Company[]
+  onCompanyClick: (company: Company) => void
 }
 
-export default function CompaniesTable({ companies }: CompaniesTableProps) {
+export default function CompaniesTable({ companies, onCompanyClick }: CompaniesTableProps) {
   if (companies.length === 0) {
     return (
       <div className="border rounded-lg p-8 text-center">
@@ -55,7 +56,11 @@ export default function CompaniesTable({ companies }: CompaniesTableProps) {
         </TableHeader>
         <TableBody>
           {companies.map((company) => (
-            <TableRow key={company.id}>
+            <TableRow 
+              key={company.id} 
+              className="cursor-pointer hover:bg-muted/50"
+              onClick={() => onCompanyClick(company)}
+            >
               <TableCell>
                 <div className="space-y-1">
                   <div className="font-medium">{company.name}</div>
@@ -82,6 +87,7 @@ export default function CompaniesTable({ companies }: CompaniesTableProps) {
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex items-center gap-1 text-sm"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       {new URL(company.website).hostname}
                       <ExternalLink className="h-3 w-3" />
@@ -99,6 +105,7 @@ export default function CompaniesTable({ companies }: CompaniesTableProps) {
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="flex items-center gap-1 text-sm"
+                      onClick={(e) => e.stopPropagation()}
                     >
                       LinkedIn
                       <ExternalLink className="h-3 w-3" />

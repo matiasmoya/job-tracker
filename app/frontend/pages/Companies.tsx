@@ -1,7 +1,9 @@
-import { Head } from '@inertiajs/react'
+import { useState } from 'react'
+import { Head, router } from '@inertiajs/react'
 import AppLayout from '@/components/AppLayout'
 import CompaniesTable from '@/components/CompaniesTable'
 import CompanyForm from '@/components/CompanyForm'
+import CompanyEditForm from '@/components/CompanyEditForm'
 import { ThemeProvider } from '@/components/ThemeProvider'
 
 interface Company {
@@ -22,6 +24,25 @@ interface CompaniesProps {
 }
 
 export default function Companies({ companies }: CompaniesProps) {
+  const [editingCompany, setEditingCompany] = useState<Company | null>(null)
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false)
+
+  const handleCompanyClick = async (company: Company) => {
+    try {
+      const response = await fetch(`/companies/${company.id}`)
+      const fullCompanyData = await response.json()
+      setEditingCompany(fullCompanyData)
+      setIsEditFormOpen(true)
+    } catch (error) {
+      console.error('Failed to fetch company data:', error)
+    }
+  }
+
+  const handleEditFormClose = () => {
+    setIsEditFormOpen(false)
+    setEditingCompany(null)
+  }
+
   return (
     <ThemeProvider defaultTheme="system" storageKey="job-tracker-theme">
       <AppLayout>
@@ -48,9 +69,15 @@ export default function Companies({ companies }: CompaniesProps) {
               </div>
             </div>
             
-            <CompaniesTable companies={companies} />
+            <CompaniesTable companies={companies} onCompanyClick={handleCompanyClick} />
           </div>
         </div>
+
+        <CompanyEditForm 
+          company={editingCompany}
+          open={isEditFormOpen}
+          onOpenChange={handleEditFormClose}
+        />
       </AppLayout>
     </ThemeProvider>
   )

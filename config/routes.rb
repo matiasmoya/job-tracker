@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   get "dashboard", to: "dashboard#index"
-  resources :companies, only: [ :index, :create ]
+  resources :companies, only: [ :index, :create, :show, :update ]
 
   get "inertia-example", to: "inertia_example#index"
 
