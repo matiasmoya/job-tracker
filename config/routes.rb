@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   get "dashboard", to: "dashboard#index"
   resources :companies, only: [ :index, :create, :show, :update ]
+  resources :contacts, only: [ :index, :create, :show, :update ]
 
   get "inertia-example", to: "inertia_example#index"
 

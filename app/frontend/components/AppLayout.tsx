@@ -53,7 +53,7 @@ const navItems = [
   },
   {
     title: "Contacts",
-    url: "#",
+    url: "/contacts",
     icon: Users,
   },
   {
