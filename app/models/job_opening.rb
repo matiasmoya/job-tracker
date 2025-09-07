@@ -10,7 +10,7 @@ class JobOpening < ApplicationRecord
   validates :source, length: { maximum: 255 }
   validates :match_score, inclusion: { in: 0..100 }, allow_nil: true
   validates :interest_score, inclusion: { in: 0..100 }, allow_nil: true
-  validates :is_public, inclusion: { in: [true, false] }
+  validates :is_public, inclusion: { in: [ true, false ] }
 
   # Scopes
   scope :public_postings, -> { where(is_public: true) }
@@ -29,13 +29,13 @@ class JobOpening < ApplicationRecord
   end
 
   def application_status
-    application_process&.status || 'not_applied'
+    application_process&.status || "not_applied"
   end
 
   def score_summary
     scores = []
     scores << "Match: #{match_score}%" if match_score
     scores << "Interest: #{interest_score}%" if interest_score
-    scores.join(', ')
+    scores.join(", ")
   end
 end

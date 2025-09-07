@@ -11,7 +11,7 @@ class Contact < ApplicationRecord
 
   # Scopes
   scope :by_role, ->(role) { where(role: role) }
-  scope :with_email, -> { where.not(email: [nil, '']) }
+  scope :with_email, -> { where.not(email: [ nil, "" ]) }
 
   # Instance methods
   def display_name
@@ -19,9 +19,9 @@ class Contact < ApplicationRecord
   end
 
   def full_contact_info
-    info = [name]
+    info = [ name ]
     info << "(#{role})" if role.present?
     info << "at #{company.name}" if company
-    info.join(' ')
+    info.join(" ")
   end
 end

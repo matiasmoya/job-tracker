@@ -22,7 +22,7 @@ class CompanyTest < ActiveSupport::TestCase
   end
 
   test "should limit name length to 255 characters" do
-    @company.name = 'a' * 256
+    @company.name = "a" * 256
     assert_not @company.valid?
     assert_includes @company.errors[:name], "is too long (maximum is 255 characters)"
   end
@@ -68,7 +68,7 @@ class CompanyTest < ActiveSupport::TestCase
   test "should destroy associated job_openings when destroyed" do
     job_opening_ids = @company.job_opening_ids
     @company.destroy
-    
+
     job_opening_ids.each do |id|
       assert_nil JobOpening.find_by(id: id)
     end

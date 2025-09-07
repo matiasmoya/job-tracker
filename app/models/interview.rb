@@ -14,15 +14,15 @@ class Interview < ApplicationRecord
   validate :scheduled_at_not_in_past, on: :create
 
   # Scopes
-  scope :upcoming, -> { where('scheduled_at > ?', Time.current) }
-  scope :past, -> { where('scheduled_at <= ?', Time.current) }
+  scope :upcoming, -> { where("scheduled_at > ?", Time.current) }
+  scope :past, -> { where("scheduled_at <= ?", Time.current) }
   scope :by_type, ->(type) { where(interview_type: type) }
   scope :ordered_by_round, -> { order(:round_number) }
-  scope :recent, -> { where('scheduled_at >= ?', 7.days.ago) }
+  scope :recent, -> { where("scheduled_at >= ?", 7.days.ago) }
 
   # Class methods
   def self.common_interview_types
-    ['technical', 'behavioral', 'cultural', 'hr_screening', 'system_design', 'take_home', 'final_round']
+    [ "technical", "behavioral", "cultural", "hr_screening", "system_design", "take_home", "final_round" ]
   end
 
   # Instance methods
@@ -31,11 +31,11 @@ class Interview < ApplicationRecord
   end
 
   def duration_display
-    return 'Not specified' unless duration
-    
+    return "Not specified" unless duration
+
     hours = duration / 60
     minutes = duration % 60
-    
+
     if hours > 0 && minutes > 0
       "#{hours}h #{minutes}m"
     elsif hours > 0
@@ -66,9 +66,9 @@ class Interview < ApplicationRecord
 
   def scheduled_at_not_in_past
     return unless scheduled_at
-    
+
     if scheduled_at <= Time.current
-      errors.add(:scheduled_at, 'cannot be in the past')
+      errors.add(:scheduled_at, "cannot be in the past")
     end
   end
 end

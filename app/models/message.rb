@@ -15,18 +15,18 @@ class Message < ApplicationRecord
 
   # Class methods to simulate enum functionality
   def self.directions
-    { 'sent' => 0, 'received' => 1 }
+    { "sent" => 0, "received" => 1 }
   end
 
   # Scopes
-  scope :recent, -> { where('sent_at >= ?', 7.days.ago) }
+  scope :recent, -> { where("sent_at >= ?", 7.days.ago) }
   scope :ordered_by_date, -> { order(:sent_at) }
-  scope :sent_messages, -> { where(direction: 'sent') }
-  scope :received_messages, -> { where(direction: 'received') }
+  scope :sent_messages, -> { where(direction: "sent") }
+  scope :received_messages, -> { where(direction: "received") }
 
   # Instance methods
   def display_direction
-    direction == 'sent' ? 'To' : 'From'
+    direction == "sent" ? "To" : "From"
   end
 
   def short_content(limit = 100)
@@ -40,6 +40,6 @@ class Message < ApplicationRecord
   end
 
   def formatted_sent_at
-    sent_at.strftime('%B %d, %Y at %I:%M %p')
+    sent_at.strftime("%B %d, %Y at %I:%M %p")
   end
 end

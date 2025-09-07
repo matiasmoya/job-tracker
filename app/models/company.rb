@@ -20,6 +20,6 @@ class Company < ApplicationRecord
   end
 
   def active_applications_count
-    application_processes.where.not(status: ['rejected', 'closed']).count
+    application_processes.where.not(status: [ "rejected", "closed" ]).count
   end
 end
