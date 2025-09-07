@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import { router } from '@inertiajs/react'
+import { router, Link } from '@inertiajs/react'
 import { 
   Sidebar,
   SidebarContent,
@@ -48,7 +48,7 @@ const navItems = [
   },
   {
     title: "Companies",
-    url: "#",
+    url: "/companies",
     icon: Building2,
   },
   {
@@ -99,10 +99,10 @@ export default function AppLayout({ children }: AppLayoutProps) {
                 {navItems.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild>
-                      <a href={item.url}>
+                      <Link href={item.url}>
                         <item.icon />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
