@@ -1,5 +1,4 @@
 class MessagesController < ApplicationController
-  allow_unauthenticated_access
   before_action :find_job
 
   def create
