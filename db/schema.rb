@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_09_06_224547) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_08_024333) do
   create_table "application_processes", force: :cascade do |t|
     t.date "applied_on"
     t.datetime "created_at", null: false
@@ -75,13 +75,25 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_06_224547) do
     t.index ["application_process_id"], name: "index_interviews_on_application_process_id"
   end
 
+  create_table "job_opening_contacts", force: :cascade do |t|
+    t.integer "contact_id", null: false
+    t.datetime "created_at", null: false
+    t.integer "job_opening_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contact_id"], name: "index_job_opening_contacts_on_contact_id"
+    t.index ["job_opening_id", "contact_id"], name: "idx_job_opening_contacts_unique", unique: true
+    t.index ["job_opening_id"], name: "index_job_opening_contacts_on_job_opening_id"
+  end
+
   create_table "job_openings", force: :cascade do |t|
     t.integer "company_id", null: false
     t.datetime "created_at", null: false
     t.text "description"
     t.integer "interest_score"
     t.boolean "is_public", default: true
+    t.string "location"
     t.integer "match_score"
+    t.string "salary"
     t.string "source"
     t.text "tech_stack"
     t.string "title"
@@ -112,6 +124,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_06_224547) do
   end
 
   create_table "tasks", force: :cascade do |t|
+    t.integer "application_process_id"
     t.boolean "completed", default: false
     t.datetime "created_at", null: false
     t.date "due_date"
@@ -119,6 +132,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_06_224547) do
     t.string "title"
     t.datetime "updated_at", null: false
     t.integer "user_id", null: false
+    t.index ["application_process_id"], name: "index_tasks_on_application_process_id"
     t.index ["user_id"], name: "index_tasks_on_user_id"
   end
 
@@ -134,9 +148,12 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_06_224547) do
   add_foreign_key "contacts", "companies"
   add_foreign_key "content_ideas", "job_openings"
   add_foreign_key "interviews", "application_processes"
+  add_foreign_key "job_opening_contacts", "contacts"
+  add_foreign_key "job_opening_contacts", "job_openings"
   add_foreign_key "job_openings", "companies"
   add_foreign_key "messages", "application_processes"
   add_foreign_key "messages", "contacts"
   add_foreign_key "sessions", "users"
+  add_foreign_key "tasks", "application_processes"
   add_foreign_key "tasks", "users"
 end

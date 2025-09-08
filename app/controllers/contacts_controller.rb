@@ -1,5 +1,5 @@
 class ContactsController < ApplicationController
-  before_action :require_authentication
+  allow_unauthenticated_access
   before_action :find_contact, only: [ :show, :update ]
 
   def index

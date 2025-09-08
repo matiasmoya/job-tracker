@@ -2,6 +2,8 @@ class Contact < ApplicationRecord
   # Associations
   belongs_to :company
   has_many :messages, dependent: :destroy
+  has_many :job_opening_contacts, dependent: :destroy
+  has_many :job_openings, through: :job_opening_contacts
 
   # Validations
   validates :name, presence: true, length: { maximum: 255 }

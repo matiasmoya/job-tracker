@@ -58,7 +58,7 @@ const navItems = [
   },
   {
     title: "Jobs",
-    url: "#",
+    url: "/jobs",
     icon: Briefcase,
   },
   {

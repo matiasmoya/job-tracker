@@ -2,9 +2,18 @@ class ApplicationProcess < ApplicationRecord
   belongs_to :job_opening
   has_many :interviews, dependent: :destroy
   has_many :messages, dependent: :destroy
+  has_many :tasks, dependent: :destroy
   has_one :company, through: :job_opening
 
-  enum :status, draft: 0, applied: 1, in_review: 2, interviewing: 3, offer: 4, rejected: 5, closed: 6
+  enum :status, {
+    draft: 'draft',
+    applied: 'applied', 
+    in_review: 'in_review',
+    interviewing: 'interviewing',
+    offer: 'offer',
+    rejected: 'rejected',
+    closed: 'closed'
+  }
 
   validates :status, presence: true
   validates :applied_on, presence: true, if: -> { status != "draft" }

@@ -1,5 +1,5 @@
 class CompaniesController < ApplicationController
-  before_action :require_authentication
+  allow_unauthenticated_access
   before_action :find_company, only: [ :show, :update ]
 
   def index

@@ -1,7 +1,7 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 tech_corp_application:
-  status: ApplicationProcess.statuses[:applied]
+  status: applied
   applied_on: <%= 10.days.ago.to_date %>
   job_posted_on: <%= 15.days.ago.to_date %>
   last_follow_up_on: <%= 3.days.ago.to_date %>
@@ -9,7 +9,7 @@ tech_corp_application:
   job_opening: senior_rails_dev
 
 innovate_labs_application:
-  status: <%= ApplicationProcess.statuses[:draft] %>
+  status: draft
   applied_on: <%= 5.days.ago.to_date %>
   job_posted_on: <%= 8.days.ago.to_date %>
   last_follow_up_on: <%= 2.days.ago.to_date %>
@@ -17,7 +17,7 @@ innovate_labs_application:
   job_opening: fullstack_engineer
 
 draft_application:
-  status: ApplicationProcess.statuses[:draft]
+  status: draft
   applied_on: null
   job_posted_on: <%= Date.current %>
   last_follow_up_on: null

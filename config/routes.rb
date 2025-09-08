@@ -5,6 +5,15 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index"
   resources :companies, only: [ :index, :create, :show, :update ]
   resources :contacts, only: [ :index, :create, :show, :update ]
+  resources :jobs, only: [ :index, :create, :show, :update ] do
+    member do
+      patch :update_status
+      post :toggle_task
+    end
+    resources :messages, only: [ :create ]
+    resources :interviews, only: [ :create ]
+    resources :tasks, only: [ :create ]
+  end
 
   get "inertia-example", to: "inertia_example#index"
 
