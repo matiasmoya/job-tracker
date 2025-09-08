@@ -172,7 +172,8 @@ export default function MessageForm({ jobId, applicationProcessId, contacts, onC
               }
             }}
             placeholder="Enter the message content..."
-            rows={4}
+            rows={24}
+            className="min-h-[300px]"
           />
           {errors.content && (
             <p className="text-sm text-red-600">{errors.content}</p>

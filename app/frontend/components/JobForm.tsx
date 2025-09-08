@@ -3,7 +3,7 @@ import { router } from '@inertiajs/react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { MinimalTiptapEditor } from '@/components/ui/minimal-tiptap'
 import {
   Select,
   SelectContent,
@@ -16,6 +16,7 @@ import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { TagInput } from '@/components/ui/tag-input'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { Plus, X } from 'lucide-react'
 
 interface JobFormData {
@@ -23,6 +24,7 @@ interface JobFormData {
   description: string
   location: string
   salary: string
+  source: string
   tech_stack: string[]
   company_id: string
   contact_ids: string[]
@@ -74,6 +76,7 @@ interface Job {
   application_process: ApplicationProcess
   location?: string
   salary?: string
+  source?: string
   tech_stack?: string[]
   description?: string
   created_at: string
@@ -100,6 +103,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
     description: job?.description || '',
     location: job?.location || '',
     salary: job?.salary || '',
+    source: job?.source || '',
     tech_stack: job?.tech_stack || [],
     company_id: job?.company?.id?.toString() || '',
     contact_ids: job?.contacts?.map(c => c.id.toString()) || [],
@@ -125,6 +129,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
         title: job.title || '',
         description: job.description || '',
         location: job.location || '',
+        source: job.source || '',
         salary: job.salary || '',
         tech_stack: job.tech_stack || [],
         company_id: job.company.id.toString(),
@@ -220,6 +225,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
       description: formData.description,
       location: formData.location,
       salary: formData.salary,
+      source: formData.source,
       tech_stack: formData.tech_stack.join(','),  // Convert array to comma-separated string
       contact_ids: formData.contact_ids,
       company_id: formData.company_id,
@@ -242,6 +248,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
       description: submitData.description,
       location: submitData.location,
       salary: submitData.salary,
+      source: submitData.source,
       tech_stack: submitData.tech_stack,  // Already a comma-separated string
       contact_ids: submitData.contact_ids.map((id: string) => parseInt(id, 10))
     }
@@ -270,6 +277,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
             description: '',
             location: '',
             salary: '',
+            source: '',
             tech_stack: [],
             company_id: '',
             contact_ids: [],
@@ -347,6 +355,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
       title: formData.title,
       description: formData.description,
       location: formData.location,
+      source: formData.source,
       salary: formData.salary,
       company_id: parseInt(formData.company_id, 10),
       contact_ids: newContactIds.map(id => parseInt(id, 10))
@@ -376,13 +385,14 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
   }
 
   return (
-    <div className="space-y-6">
-      <SheetHeader>
-        <SheetTitle>{job ? 'Edit Job' : 'New Job'}</SheetTitle>
-        <SheetDescription>
-          {job ? 'Update the job details below.' : 'Add a new job opportunity to track.'}
-        </SheetDescription>
-      </SheetHeader>
+    <TooltipProvider>
+      <div className="space-y-6">
+        <SheetHeader>
+          <SheetTitle>{job ? 'Edit Job' : 'New Job'}</SheetTitle>
+          <SheetDescription>
+            {job ? 'Update the job details below.' : 'Add a new job opportunity to track.'}
+          </SheetDescription>
+        </SheetHeader>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="space-y-2">
@@ -642,6 +652,16 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
         )}
 
         <div className="space-y-2">
+          <Label htmlFor="source">Source</Label>
+          <Input
+            id="source"
+            type="url"
+            value={formData?.source || ''}
+            onChange={(e) => handleInputChange('source', e.target.value)}
+            placeholder="Job post URL or referral link"
+          />
+        </div>
+        <div className="space-y-2">
           <Label htmlFor="location">Location</Label>
           <Input
             id="location"
@@ -674,12 +694,13 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
 
         <div className="space-y-2">
           <Label htmlFor="description">Description</Label>
-          <Textarea
-            id="description"
+          <MinimalTiptapEditor
             value={formData.description}
-            onChange={(e) => handleInputChange('description', e.target.value)}
+            onChange={(value) => handleInputChange('description', value as string)}
             placeholder="Job description, requirements, or notes..."
-            rows={4}
+            output="html"
+            editorClassName="min-h-[150px] max-h-[400px] overflow-y-auto"
+            editorContentClassName="p-3"
           />
         </div>
 
@@ -695,6 +716,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
           </Button>
         </div>
       </form>
-    </div>
+      </div>
+    </TooltipProvider>
   )
 }

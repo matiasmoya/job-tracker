@@ -6,13 +6,13 @@ class ApplicationProcess < ApplicationRecord
   has_one :company, through: :job_opening
 
   enum :status, {
-    draft: 'draft',
-    applied: 'applied', 
-    in_review: 'in_review',
-    interviewing: 'interviewing',
-    offer: 'offer',
-    rejected: 'rejected',
-    closed: 'closed'
+    draft: "draft",
+    applied: "applied",
+    in_review: "in_review",
+    interviewing: "interviewing",
+    offer: "offer",
+    rejected: "rejected",
+    closed: "closed"
   }
 
   validates :status, presence: true

@@ -8,6 +8,12 @@ module SessionTestHelper
     end
   end
 
+  def sign_in(user)
+    post session_path, params: { email_address: user.email_address, password: "password" }
+    assert_redirected_to root_url
+    follow_redirect!
+  end
+
   def sign_out
     Current.session&.destroy!
     cookies.delete(:session_id)

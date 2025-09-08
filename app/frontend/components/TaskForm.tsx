@@ -89,7 +89,7 @@ export default function TaskForm({ jobId, applicationProcessId, onCancel, onSucc
                 setErrors(prev => ({ ...prev, title: '' }))
               }
             }}
-            placeholder="e.g., Send follow-up email"
+            placeholder="e.g., Send follow-up message"
           />
           {errors.title && (
             <p className="text-sm text-red-600">{errors.title}</p>

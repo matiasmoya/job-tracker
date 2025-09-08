@@ -6,7 +6,7 @@ class JobOpening < ApplicationRecord
   has_many :interviews, through: :application_process
   has_many :job_opening_contacts, dependent: :destroy
   has_many :contacts, through: :job_opening_contacts
-  
+
   # Nested attributes for creating new contacts
   accepts_nested_attributes_for :contacts
 

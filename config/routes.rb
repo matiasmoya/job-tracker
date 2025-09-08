@@ -5,9 +5,9 @@ Rails.application.routes.draw do
   get "dashboard", to: "dashboard#index"
   resources :companies, only: [ :index, :create, :show, :update ]
   resources :contacts, only: [ :index, :create, :show, :update ]
-  resources :jobs, only: [ :index, :create, :show, :update ] do
+  resources :jobs, only: [ :index, :create, :show, :update, :destroy ] do
     member do
-      patch :update_status
+      patch :status, to: "jobs#update_status"
       post :toggle_task
     end
     resources :messages, only: [ :create ]

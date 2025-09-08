@@ -5,7 +5,18 @@ import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Edit, Plus, MessageSquare, Calendar, CheckSquare, Briefcase } from 'lucide-react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { Edit, Plus, MessageSquare, Calendar, CheckSquare, Briefcase, Trash2, Link2 } from 'lucide-react'
 import ApplicationStatusSteps from '@/components/ApplicationStatusSteps'
 import JobTabs from '@/components/JobTabs'
 import JobForm from '@/components/JobForm'
@@ -43,6 +54,7 @@ interface Job {
   application_process: ApplicationProcess | null
   location?: string
   salary?: string
+  source?: string
   tech_stack?: string[]
   description?: string
   created_at: string
@@ -68,13 +80,23 @@ export default function JobDetails({ job, companies, contacts }: JobDetailsProps
     })
   }
 
+  const handleDelete = () => {
+    router.delete(`/jobs/${job.id}`, {
+      onSuccess: () => {
+        // Redirect will be handled by the controller
+      },
+    })
+  }
+
   const handleEditSubmit = (data: any) => {
     // Build submit data
     const submitData: any = {
       title: data.title,
       description: data.description,
       location: data.location,
-      salary: data.salary
+      salary: data.salary,
+      source: data.source,
+      tech_stack: data.tech_stack  // Already a comma-separated string from JobForm
     }
     
     // Handle company - either existing or new
@@ -139,36 +161,82 @@ export default function JobDetails({ job, companies, contacts }: JobDetailsProps
                 </>
               )}
             </div>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              {job.source && (
+                <a
+                  href={job.source.startsWith('http') ? job.source : `https://${job.source}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Badge
+                    variant="outline"
+                    className="text-xs inline-flex items-center gap-1"
+                  >
+                    <Link2 className="h-3 w-3" />
+                    Source URL
+                  </Badge>
+                </a>
+              )}
               {job.salary && (
                 <p className="text-sm text-muted-foreground">{job.salary}</p>
               )}
-              {job.tech_stack && job.tech_stack.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {job.tech_stack.map((tech, index) => (
-                    <Badge key={index} variant="secondary" className="text-xs">
-                      {tech}
-                    </Badge>
-                  ))}
-                </div>
-              )}
             </div>
-          <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="sm">
-                <Edit className="h-4 w-4 mr-1" />
-                Edit
-              </Button>
-            </SheetTrigger>
-            <SheetContent className="sm:max-w-lg">
-              <JobForm
-                companies={companies}
-                contacts={contacts}
-                job={job}
-                onSubmit={handleEditSubmit}
-                onCancel={() => setIsEditOpen(false)}
-              />
-            </SheetContent>
-          </Sheet>
+            {job.tech_stack && job.tech_stack.length > 0 && (
+              <div className="flex flex-wrap gap-2 mt-2">
+                {job.tech_stack.map((tech, index) => (
+                  <Badge key={index} variant="secondary" className="text-xs">
+                    {tech}
+                  </Badge>
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="flex gap-2">
+            <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <Edit className="h-4 w-4 mr-1" />
+                  Edit
+                </Button>
+              </SheetTrigger>
+              <SheetContent className="sm:max-w-full w-3xl overflow-y-auto max-h-screen">
+                <JobForm
+                  companies={companies}
+                  contacts={contacts}
+                  job={job}
+                  onSubmit={handleEditSubmit}
+                  onCancel={() => setIsEditOpen(false)}
+                />
+              </SheetContent>
+            </Sheet>
+            
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button variant="outline" size="sm" className="text-destructive hover:text-destructive">
+                  <Trash2 className="h-4 w-4 mr-1" />
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete the job
+                    "{job.title}" and all associated data including messages, interviews, and tasks.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={handleDelete}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                  >
+                    Delete
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
         </div>
       </div>
       <div className="flex flex-1">

@@ -30,6 +30,7 @@ interface Job {
   application_process: ApplicationProcess | null
   location?: string
   salary?: string
+  source?: string
   description?: string
   created_at: string
   updated_at: string
@@ -78,6 +79,7 @@ export default function Jobs({ jobs, companies, contacts, selectedJob, showForm 
       description: data.description,
       location: data.location,
       salary: data.salary,
+      source: data.source,
       tech_stack: data.tech_stack  // Already a comma-separated string from JobForm
     }
     
@@ -135,7 +137,7 @@ export default function Jobs({ jobs, companies, contacts, selectedJob, showForm 
                       New Job
                     </Button>
                   </SheetTrigger>
-                  <SheetContent>
+                  <SheetContent className="sm:max-w-full w-3xl overflow-y-auto max-h-screen">
                   <JobForm
                     companies={companies}
                     contacts={contacts}

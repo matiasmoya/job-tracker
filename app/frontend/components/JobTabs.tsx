@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { MessageSquare, Calendar, CheckSquare, User } from 'lucide-react'
+import DOMPurify from 'dompurify'
 
 interface Company {
   id: number
@@ -185,9 +186,14 @@ export default function JobTabs({ job }: JobTabsProps) {
               </CardHeader>
               <CardContent>
                 <div className="prose max-w-none">
-                  <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                    {job.description}
-                  </p>
+                  <div
+                    className="text-sm text-muted-foreground prose max-w-none"
+                    // job.description comes as HTML (rich text)
+                    // Sanitize to prevent XSS
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(job.description)
+                    }}
+                  />
                 </div>
               </CardContent>
             </Card>

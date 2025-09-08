@@ -2,6 +2,7 @@ require "test_helper"
 
 class JobsFrontendTest < ActionDispatch::IntegrationTest
   def setup
+    sign_in_as(users(:one))
     @company = Company.create!(
       name: "Frontend Test Company",
       industry: "Technology"
@@ -11,17 +12,17 @@ class JobsFrontendTest < ActionDispatch::IntegrationTest
   test "jobs page renders without JavaScript errors when jobs have null application_process" do
     # Clear existing data to ensure clean test
     JobOpening.destroy_all
-    
+
     # Create multiple jobs with different application_process states
     job_with_process = JobOpening.create!(
       title: "Job With Process",
       description: "Has application process",
       company: @company
     )
-    job_with_process.create_application_process!(status: 'applied', applied_on: 3.days.ago)
+    job_with_process.create_application_process!(status: "applied", applied_on: 3.days.ago)
 
     job_without_process = JobOpening.create!(
-      title: "Job Without Process", 
+      title: "Job Without Process",
       description: "No application process",
       company: @company
     )
@@ -53,18 +54,14 @@ class JobsFrontendTest < ActionDispatch::IntegrationTest
 
     # Verify job without process has null application_process
     assert_nil job_without_data["application_process"], "Should have null application_process"
-
-    puts "✓ Frontend data structure handles mixed application_process states correctly"
-    puts "  - Job with process: status = #{job_with_data['application_process']['status']}"
-    puts "  - Job without process: application_process = #{job_without_data['application_process'].inspect}"
   end
 
   test "jobs page can handle edge case where job has empty company data" do
     # Clear existing data to ensure clean test
     JobOpening.destroy_all
-    
+
     # Create a job with minimal data
-    minimal_job = JobOpening.create!(
+    JobOpening.create!(
       title: "Minimal Job",
       description: "Very basic job",
       company: @company
@@ -74,7 +71,7 @@ class JobsFrontendTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     app_div = css_select("div#app").first
-    data_page = app_div["data-page"] 
+    data_page = app_div["data-page"]
     page_data = JSON.parse(data_page)
 
     minimal_job_data = page_data["props"]["jobs"].find { |job| job["title"] == "Minimal Job" }
@@ -88,7 +85,5 @@ class JobsFrontendTest < ActionDispatch::IntegrationTest
     assert minimal_job_data["company"]["name"]
     assert minimal_job_data["created_at"]
     assert minimal_job_data["updated_at"]
-
-    puts "✓ Frontend can handle jobs with minimal data"
   end
 end

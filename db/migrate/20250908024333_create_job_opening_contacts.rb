@@ -6,7 +6,7 @@ class CreateJobOpeningContacts < ActiveRecord::Migration[8.1]
 
       t.timestamps
     end
-    
-    add_index :job_opening_contacts, [:job_opening_id, :contact_id], unique: true, name: 'idx_job_opening_contacts_unique'
+
+    add_index :job_opening_contacts, [ :job_opening_id, :contact_id ], unique: true, name: 'idx_job_opening_contacts_unique'
   end
 end
