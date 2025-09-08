@@ -1,3 +1,5 @@
+/* Tailwind source globs: include entire Rails app (views, helpers, controllers, models) */
+@source "../../**/*.{erb,html,html+erb,rb,js,jsx,ts,tsx}";
 @import "tailwindcss";
 @import "tw-animate-css";
 

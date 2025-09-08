@@ -1,11 +1,50 @@
 <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
 <%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
-
-<%= form_with url: session_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Enter your email address", value: params[:email_address] %><br>
-  <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72 %><br>
-  <%= form.submit "Sign in" %>
-<% end %>
-<br>
-
-<%= link_to "Forgot password?", new_password_path %>
+<% input_class_tailwind = "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive" %>
+<% button_class_tailwind = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 h-9 px-4 py-2 has-[>svg]:px-3 w-full" %>
+<div class="grid min-h-svh md:grid-cols-2">
+  <div class="flex flex-col gap-4 p-6 md:p-10">
+    <div class="flex justify-center gap-2 md:justify-start">
+      <a href="#" class="flex items-center gap-2 font-medium">
+        <div class="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-briefcase size-4" aria-hidden="true"><path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path><rect width="20" height="14" x="2" y="6" rx="2"></rect></svg>
+        </div>
+        Job Tracker
+      </a>
+    </div>
+    <div class="flex flex-1 items-center justify-center">
+      <div class="w-full max-w-xs">
+        <%= form_with url: session_path, class:"flex flex-col gap-6" do |form| %>
+          <div class="flex flex-col items-center gap-2 text-center">
+            <h1 class="text-2xl font-bold">Login to your account</h1>
+            <p class="text-muted-foreground text-sm text-balance">
+              Enter your email below to login to your account
+            </p>
+          </div>
+          <div class="grid gap-6 max-w-full">
+            <div class="grid gap-3">
+              <%= form.label :email_address, "Email", class: "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50" %>
+              <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username",
+                  placeholder: "Enter your email address", value: params[:email_address], class: input_class_tailwind
+              %>
+            </div>
+            <div class="grid gap-3">
+              <div class="flex items-center">
+                <%= form.label :password, "Password", class: "flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50" %>
+                <%= link_to "Forgot password?", new_password_path, class: "ml-auto text-sm underline-offset-4 hover:underline" %>
+              </div>
+              <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Enter your password", maxlength: 72, class: input_class_tailwind %>
+            </div>
+            <%= form.submit "Sign in", class: button_class_tailwind %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+  <div class="bg-muted relative block">
+    <img
+      src="/work-bg.jpg"
+      alt="Image"
+      class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale">
+  </div>
+</div>
