@@ -43,6 +43,7 @@ interface Job {
   application_process: ApplicationProcess | null
   location?: string
   salary?: string
+  tech_stack?: string[]
   description?: string
   created_at: string
   updated_at: string
@@ -123,183 +124,193 @@ export default function JobDetails({ job, companies, contacts }: JobDetailsProps
   }
 
   return (
-    <div className="flex flex-1">
-      {/* Main Content */}
-      <div className="flex-1 flex flex-col">
+    <>
+      <div className="p-6 border-b border-border">
         {/* Header */}
-        <div className="p-6 border-b border-border">
-          <div className="flex items-start justify-between">
-            <div className="space-y-1">
-              <h1 className="text-2xl font-semibold text-foreground">{job.title}</h1>
-              <div className="flex items-center gap-2 text-muted-foreground">
-                <span className="font-medium">{job.company.name}</span>
-                {job.location && (
-                  <>
-                    <span>•</span>
-                    <span>{job.location}</span>
-                  </>
-                )}
-              </div>
+        <div className="flex items-start justify-between">
+          <div className="space-y-1">
+            <h1 className="text-2xl font-semibold text-foreground">{job.title}</h1>
+            <div className="flex items-center gap-2 text-muted-foreground">
+              <span className="font-medium">{job.company.name}</span>
+              {job.location && (
+                <>
+                  <span>•</span>
+                  <span>{job.location}</span>
+                </>
+              )}
+            </div>
               {job.salary && (
                 <p className="text-sm text-muted-foreground">{job.salary}</p>
               )}
+              {job.tech_stack && job.tech_stack.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {job.tech_stack.map((tech, index) => (
+                    <Badge key={index} variant="secondary" className="text-xs">
+                      {tech}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </div>
-            <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="sm">
-                  <Edit className="h-4 w-4 mr-1" />
-                  Edit
-                </Button>
-              </SheetTrigger>
-              <SheetContent className="sm:max-w-lg">
-                <JobForm
-                  companies={companies}
-                  contacts={contacts}
-                  job={job}
-                  onSubmit={handleEditSubmit}
-                  onCancel={() => setIsEditOpen(false)}
-                />
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-
-        {/* Application Status Steps */}
-        {job.application_process && (
-          <div className="p-6 border-b border-border">
-            <ApplicationStatusSteps
-              currentStatus={job.application_process.status}
-              appliedOn={job.application_process.applied_on}
-              onStatusChange={handleStatusUpdate}
-            />
-          </div>
-        )}
-
-        {/* Tabs */}
-        <div className="flex-1">
-          <JobTabs job={job} />
+          <Sheet open={isEditOpen} onOpenChange={setIsEditOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="sm">
+                <Edit className="h-4 w-4 mr-1" />
+                Edit
+              </Button>
+            </SheetTrigger>
+            <SheetContent className="sm:max-w-lg">
+              <JobForm
+                companies={companies}
+                contacts={contacts}
+                job={job}
+                onSubmit={handleEditSubmit}
+                onCancel={() => setIsEditOpen(false)}
+              />
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
+      <div className="flex flex-1">
+        {/* Main Content */}
+        <div className="flex-1 flex flex-col">
+          {/* Application Status Steps */}
+          {job.application_process && (
+            <div className="p-6 border-b border-border">
+              <ApplicationStatusSteps
+                currentStatus={job.application_process.status}
+                appliedOn={job.application_process.applied_on}
+                onStatusChange={handleStatusUpdate}
+              />
+            </div>
+          )}
 
-      {/* Actions Sidebar */}
-      <div className="w-64 border-l border-border bg-card">
-        <div className="p-4">
-          <h3 className="font-medium text-foreground mb-4">Quick Actions</h3>
-          
-          <div className="space-y-2">
-            {/* Add Message */}
-            <Sheet open={isMessageOpen} onOpenChange={setIsMessageOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Add Message
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <MessageForm
-                  jobId={job.id}
-                  applicationProcessId={job.application_process?.id || 0}
-                  contacts={job.contacts || []}
-                  onCancel={() => setIsMessageOpen(false)}
-                  onSuccess={() => setIsMessageOpen(false)}
-                />
-              </SheetContent>
-            </Sheet>
-            
-            {/* Schedule Interview */}
-            <Sheet open={isInterviewOpen} onOpenChange={setIsInterviewOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <Calendar className="h-4 w-4 mr-2" />
-                  Schedule Interview
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <InterviewForm
-                  jobId={job.id}
-                  applicationProcessId={job.application_process?.id || 0}
-                  onCancel={() => setIsInterviewOpen(false)}
-                  onSuccess={() => setIsInterviewOpen(false)}
-                />
-              </SheetContent>
-            </Sheet>
-            
-            {/* Add Task */}
-            <Sheet open={isTaskOpen} onOpenChange={setIsTaskOpen}>
-              <SheetTrigger asChild>
-                <Button variant="outline" className="w-full justify-start" size="sm">
-                  <CheckSquare className="h-4 w-4 mr-2" />
-                  Add Task
-                </Button>
-              </SheetTrigger>
-              <SheetContent>
-                <TaskForm
-                  jobId={job.id}
-                  applicationProcessId={job.application_process?.id || 0}
-                  onCancel={() => setIsTaskOpen(false)}
-                  onSuccess={() => setIsTaskOpen(false)}
-                />
-              </SheetContent>
-            </Sheet>
-            
-            {/* Record Offer - Placeholder */}
-            <Button variant="outline" className="w-full justify-start" size="sm" disabled>
-              <Briefcase className="h-4 w-4 mr-2" />
-              Record Offer
-            </Button>
+          {/* Tabs */}
+          <div className="flex-1">
+            <JobTabs job={job} />
           </div>
+        </div>
 
-          <Separator className="my-6" />
+        {/* Actions Sidebar */}
+        <div className="w-64 border-l border-border bg-card">
+          <div className="p-4">
+            <h3 className="font-medium text-foreground mb-4">Quick Actions</h3>
+            
+            <div className="space-y-2">
+              {/* Add Message */}
+              <Sheet open={isMessageOpen} onOpenChange={setIsMessageOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start" size="sm">
+                    <MessageSquare className="h-4 w-4 mr-2" />
+                    Add Message
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <MessageForm
+                    jobId={job.id}
+                    applicationProcessId={job.application_process?.id || 0}
+                    contacts={job.contacts || []}
+                    onCancel={() => setIsMessageOpen(false)}
+                    onSuccess={() => setIsMessageOpen(false)}
+                  />
+                </SheetContent>
+              </Sheet>
+              
+              {/* Schedule Interview */}
+              <Sheet open={isInterviewOpen} onOpenChange={setIsInterviewOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start" size="sm">
+                    <Calendar className="h-4 w-4 mr-2" />
+                    Schedule Interview
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <InterviewForm
+                    jobId={job.id}
+                    applicationProcessId={job.application_process?.id || 0}
+                    onCancel={() => setIsInterviewOpen(false)}
+                    onSuccess={() => setIsInterviewOpen(false)}
+                  />
+                </SheetContent>
+              </Sheet>
+              
+              {/* Add Task */}
+              <Sheet open={isTaskOpen} onOpenChange={setIsTaskOpen}>
+                <SheetTrigger asChild>
+                  <Button variant="outline" className="w-full justify-start" size="sm">
+                    <CheckSquare className="h-4 w-4 mr-2" />
+                    Add Task
+                  </Button>
+                </SheetTrigger>
+                <SheetContent>
+                  <TaskForm
+                    jobId={job.id}
+                    applicationProcessId={job.application_process?.id || 0}
+                    onCancel={() => setIsTaskOpen(false)}
+                    onSuccess={() => setIsTaskOpen(false)}
+                  />
+                </SheetContent>
+              </Sheet>
+              
+              {/* Record Offer - Placeholder */}
+              <Button variant="outline" className="w-full justify-start" size="sm" disabled>
+                <Briefcase className="h-4 w-4 mr-2" />
+                Record Offer
+              </Button>
+            </div>
 
-          <div className="space-y-4">
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-sm">Application Details</CardTitle>
-              </CardHeader>
-              <CardContent className="text-xs space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Status:</span>
-                  <Badge variant="secondary" className="text-xs">
-                    {job.application_process?.status?.replace('_', ' ') || 'No Status'}
-                  </Badge>
-                </div>
-                {job.application_process?.applied_on && (
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Applied:</span>
-                    <span>{formatDate(job.application_process.applied_on)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Created:</span>
-                  <span>{formatDate(job.created_at)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-muted-foreground">Updated:</span>
-                  <span>{formatDate(job.updated_at)}</span>
-                </div>
-              </CardContent>
-            </Card>
+            <Separator className="my-6" />
 
-            {job.company.website && (
+            <div className="space-y-4">
               <Card>
                 <CardHeader className="pb-2">
-                  <CardTitle className="text-sm">Company</CardTitle>
+                  <CardTitle className="text-sm">Application Details</CardTitle>
                 </CardHeader>
-                <CardContent className="text-xs">
-                  <a 
-                    href={job.company.website} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 underline"
-                  >
-                    Visit Website
-                  </a>
+                <CardContent className="text-xs space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Status:</span>
+                    <Badge variant="secondary" className="text-xs">
+                      {job.application_process?.status?.replace('_', ' ') || 'No Status'}
+                    </Badge>
+                  </div>
+                  {job.application_process?.applied_on && (
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">Applied:</span>
+                      <span>{formatDate(job.application_process.applied_on)}</span>
+                    </div>
+                  )}
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Created:</span>
+                    <span>{formatDate(job.created_at)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground">Updated:</span>
+                    <span>{formatDate(job.updated_at)}</span>
+                  </div>
                 </CardContent>
               </Card>
-            )}
+
+              {job.company.website && (
+                <Card>
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-sm">Company</CardTitle>
+                  </CardHeader>
+                  <CardContent className="text-xs">
+                    <a 
+                      href={job.company.website} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 underline"
+                    >
+                      Visit Website
+                    </a>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>            
   )
 }

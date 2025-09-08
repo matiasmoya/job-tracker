@@ -15,6 +15,7 @@ import {
 import { SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { TagInput } from '@/components/ui/tag-input'
 import { Plus, X } from 'lucide-react'
 
 interface JobFormData {
@@ -22,6 +23,7 @@ interface JobFormData {
   description: string
   location: string
   salary: string
+  tech_stack: string[]
   company_id: string
   contact_ids: string[]
   new_contact?: NewContactData
@@ -72,6 +74,7 @@ interface Job {
   application_process: ApplicationProcess
   location?: string
   salary?: string
+  tech_stack?: string[]
   description?: string
   created_at: string
   updated_at: string
@@ -97,6 +100,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
     description: job?.description || '',
     location: job?.location || '',
     salary: job?.salary || '',
+    tech_stack: job?.tech_stack || [],
     company_id: job?.company?.id?.toString() || '',
     contact_ids: job?.contacts?.map(c => c.id.toString()) || [],
     new_contact: {
@@ -122,6 +126,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
         description: job.description || '',
         location: job.location || '',
         salary: job.salary || '',
+        tech_stack: job.tech_stack || [],
         company_id: job.company.id.toString(),
         contact_ids: job.contacts?.map(c => c.id.toString()) || [],
         new_contact: {
@@ -215,6 +220,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
       description: formData.description,
       location: formData.location,
       salary: formData.salary,
+      tech_stack: formData.tech_stack.join(','),  // Convert array to comma-separated string
       contact_ids: formData.contact_ids,
       company_id: formData.company_id,
       new_contact: formData.new_contact,
@@ -236,6 +242,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
       description: submitData.description,
       location: submitData.location,
       salary: submitData.salary,
+      tech_stack: submitData.tech_stack,  // Already a comma-separated string
       contact_ids: submitData.contact_ids.map((id: string) => parseInt(id, 10))
     }
     
@@ -263,6 +270,7 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
             description: '',
             location: '',
             salary: '',
+            tech_stack: [],
             company_id: '',
             contact_ids: [],
             new_contact: {
@@ -652,6 +660,15 @@ export default function JobForm({ companies, contacts, job, onSubmit, onCancel }
             value={formData.salary}
             onChange={(e) => handleInputChange('salary', e.target.value)}
             placeholder="e.g. $120,000 - $150,000"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="tech_stack">Tech Stack</Label>
+          <TagInput
+            value={formData.tech_stack}
+            onChange={(tags) => setFormData(prev => ({ ...prev, tech_stack: tags }))}
+            placeholder="e.g. React, Node.js, PostgreSQL (press Enter or comma to add)"
           />
         </div>
 

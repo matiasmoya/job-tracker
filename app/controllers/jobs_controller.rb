@@ -51,6 +51,7 @@ class JobsController < ApplicationController
           description: job.description,
           location: job.location,
           salary: job.salary,
+          tech_stack: job.tech_stack.to_s.split(',').map(&:strip).reject(&:empty?),
           created_at: job.created_at.iso8601,
           updated_at: job.updated_at.iso8601
         }
@@ -247,10 +248,10 @@ class JobsController < ApplicationController
 
   def job_params
     params.require(:job_opening).permit(
-      :title, :description, :company_id, :location, :salary,
+      :title, :description, :company_id, :location, :salary, :tech_stack,
       contact_ids: [],
-      new_contact_attributes: [ :name, :role, :email, :linkedin_url ],
-      new_company_attributes: [ :name, :industry, :website, :linkedin_url ]
+      new_contact_attributes: [:name, :role, :email, :linkedin_url],
+      new_company_attributes: [:name, :industry, :website, :linkedin_url]
     )
   end
 
@@ -268,6 +269,7 @@ class JobsController < ApplicationController
       description: job.description,
       location: job.location,
       salary: job.salary,
+      tech_stack: job.tech_stack.to_s.split(',').map(&:strip).reject(&:empty?),
       company: {
         id: job.company.id,
         name: job.company.name,

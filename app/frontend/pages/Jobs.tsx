@@ -77,7 +77,8 @@ export default function Jobs({ jobs, companies, contacts, selectedJob, showForm 
       title: data.title,
       description: data.description,
       location: data.location,
-      salary: data.salary
+      salary: data.salary,
+      tech_stack: data.tech_stack  // Already a comma-separated string from JobForm
     }
     
     // Handle company - either existing or new
@@ -123,7 +124,7 @@ export default function Jobs({ jobs, companies, contacts, selectedJob, showForm 
         
         <div className="flex h-full bg-background">
           {/* Jobs List Sidebar */}
-          <div className="w-80 border-r border-border bg-card">
+          <div className="w-64 border-r border-border bg-card">
             <div className="p-4 border-b border-border">
               <div className="flex items-center justify-between mb-4">
                 <h1 className="text-xl font-semibold text-foreground">Jobs</h1>
