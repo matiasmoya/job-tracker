@@ -4,8 +4,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
-import { MessageSquare, Calendar, CheckSquare, User } from 'lucide-react'
+import { MessageSquare, Calendar, CheckSquare, User, Expand } from 'lucide-react'
 import DOMPurify from 'dompurify'
+import MessageDetailsDialog from '@/components/MessageDetailsDialog'
+import MessagesExpandedSheet from '@/components/MessagesExpandedSheet'
 
 interface Company {
   id: number
@@ -27,6 +29,9 @@ interface Message {
   direction: string
   sent_at: string
   contact_name: string
+  contact_role?: string | null
+  contact_email?: string | null
+  contact_linkedin_url?: string | null
   short_content: string
 }
 
@@ -124,6 +129,34 @@ const createActivityItems = (job: Job) => {
 }
 
 export default function JobTabs({ job }: JobTabsProps) {
+  const [messageDialogOpen, setMessageDialogOpen] = React.useState(false)
+  const [messagesSheetOpen, setMessagesSheetOpen] = React.useState(false)
+  const [selectedMessage, setSelectedMessage] = React.useState<null | {
+    id: number
+    content: string
+    direction: string
+    sent_at: string
+    contact_name: string
+    contact_role?: string | null
+    contact_email?: string | null
+    contact_linkedin_url?: string | null
+    short_content: string
+  }>(null)
+
+  const openMessageDialog = (message: Message) => {
+    setSelectedMessage({
+      id: message.id,
+      content: message.content,
+      direction: message.direction,
+      sent_at: message.sent_at,
+      contact_name: message.contact_name,
+      contact_role: message.contact_role,
+      contact_email: message.contact_email,
+      contact_linkedin_url: message.contact_linkedin_url,
+      short_content: message.short_content,
+    })
+    setMessageDialogOpen(true)
+  }
   const handleTaskToggle = (taskId: number) => {
     router.post(`/jobs/${job.id}/toggle_task`, { task_id: taskId }, {
       preserveScroll: true,
@@ -256,14 +289,31 @@ export default function JobTabs({ job }: JobTabsProps) {
                   <MessageSquare className="h-5 w-5" />
                   Messages
                 </CardTitle>
-                <Badge variant="secondary">{job.messages?.length || 0}</Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">{job.messages?.length || 0}</Badge>
+                  {job.messages && job.messages.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={() => setMessagesSheetOpen(true)}
+                      className="p-1 hover:bg-muted rounded-sm transition-colors"
+                      title="Expand messages view"
+                    >
+                      <Expand className="h-4 w-4 text-muted-foreground hover:text-foreground" />
+                    </button>
+                  )}
+                </div>
               </div>
             </CardHeader>
             <CardContent>
               {job.messages && job.messages.length > 0 ? (
                 <div className="space-y-3">
                   {job.messages.map((message) => (
-                    <div key={message.id} className="border-l-2 border-muted pl-4 py-2">
+                    <button
+                      key={message.id}
+                      type="button"
+                      className="w-full text-left border-l-2 border-muted pl-4 py-2 hover:bg-muted/50 rounded-sm transition-colors"
+                      onClick={() => openMessageDialog(message)}
+                    >
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <Badge variant={message.direction === 'sent' ? 'default' : 'secondary'} className="text-xs">
@@ -276,7 +326,7 @@ export default function JobTabs({ job }: JobTabsProps) {
                         <span className="text-xs text-muted-foreground">{formatDate(message.sent_at)}</span>
                       </div>
                       <p className="text-sm text-muted-foreground mt-1">{message.short_content}</p>
-                    </div>
+                    </button>
                   ))}
                 </div>
               ) : (
@@ -398,6 +448,22 @@ export default function JobTabs({ job }: JobTabsProps) {
           </Card>
         </div>
       </TabsContent>
+
+      {/* Message Details Dialog */}
+      <MessageDetailsDialog
+        open={messageDialogOpen}
+        onOpenChange={setMessageDialogOpen}
+        messageData={selectedMessage}
+      />
+
+      {/* Messages Expanded Sheet */}
+      <MessagesExpandedSheet
+        open={messagesSheetOpen}
+        onOpenChange={setMessagesSheetOpen}
+        messages={job.messages || []}
+        jobTitle={job.title}
+        companyName={job.company.name}
+      />
     </Tabs>
   )
 }

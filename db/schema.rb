@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2025_09_08_024333) do
+ActiveRecord::Schema[8.1].define(version: 2025_09_08_164456) do
   create_table "application_processes", force: :cascade do |t|
     t.date "applied_on"
     t.datetime "created_at", null: false
@@ -107,7 +107,7 @@ ActiveRecord::Schema[8.1].define(version: 2025_09_08_024333) do
     t.integer "contact_id", null: false
     t.text "content"
     t.datetime "created_at", null: false
-    t.string "direction"
+    t.integer "direction"
     t.datetime "sent_at"
     t.datetime "updated_at", null: false
     t.index ["application_process_id"], name: "index_messages_on_application_process_id"

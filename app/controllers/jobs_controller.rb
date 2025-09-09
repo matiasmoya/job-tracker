@@ -334,6 +334,9 @@ class JobsController < ApplicationController
           direction: m.direction,
           sent_at: m.formatted_sent_at,
           contact_name: m.contact&.name,
+          contact_role: m.contact&.role,
+          contact_email: m.contact&.email,
+          contact_linkedin_url: m.contact&.linkedin_url,
           short_content: m.short_content(100)
         }
       },

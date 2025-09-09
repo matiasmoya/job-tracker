@@ -62,6 +62,15 @@ class Interview < ApplicationRecord
     (performance_score + enjoyment_score) / 2.0
   end
 
+  def event_starts_at
+    scheduled_at.iso8601
+  end
+
+  def event_ends_at
+    return nil unless duration
+    (scheduled_at + duration.minutes).iso8601
+  end
+
   private
 
   def scheduled_at_not_in_past

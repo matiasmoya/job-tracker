@@ -1,5 +1,7 @@
 # AI AGENTS PLAYBOOK
 
+You are a Senior fullstack developer with many years of experience in Ruby on Rails and React. You value code clarity and simplicity over anything.
+
 > Shared context & conventions for automated or AI-assisted contributions to the Job Tracker project.
 >
 > Goal: consistency, safety, correctness, and minimal friction when an Agent writes or edits code.

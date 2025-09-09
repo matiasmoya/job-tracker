@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :passwords, param: :token
 
   get "dashboard", to: "dashboard#index"
+  get "calendar", to: "calendar#index"
+  patch "calendar/tasks/:id", to: "calendar#update_task", as: :update_calendar_task
   resources :companies, only: [ :index, :create, :show, :update ]
   resources :contacts, only: [ :index, :create, :show, :update ]
   resources :jobs, only: [ :index, :create, :show, :update, :destroy ] do

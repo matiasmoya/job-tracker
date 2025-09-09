@@ -57,4 +57,14 @@ class Task < ApplicationRecord
     return "Due Soon" if is_due_soon?
     "Pending"
   end
+
+  def event_starts_at
+    return nil unless due_date
+    (due_date.to_datetime + 12.hours).iso8601
+  end
+
+  def event_ends_at
+    return nil unless due_date
+    (due_date.to_datetime + 13.hours).iso8601
+  end
 end

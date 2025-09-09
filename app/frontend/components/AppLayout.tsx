@@ -68,7 +68,7 @@ const navItems = [
   },
   {
     title: "Calendar",
-    url: "#",
+    url: "/calendar",
     icon: Calendar,
   },
 ]

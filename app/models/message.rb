@@ -30,6 +30,6 @@ class Message < ApplicationRecord
   end
 
   def formatted_sent_at
-    sent_at.strftime("%B %d, %Y at %I:%M %p")
+    sent_at.iso8601
   end
 end
