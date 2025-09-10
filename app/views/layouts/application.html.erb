@@ -20,7 +20,11 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= vite_stylesheet_tag "application.css" %>
+    <% if Rails.env.development? %>
+      <%= vite_stylesheet_tag "application.css?v=#{Time.now.to_i}" %>
+    <% else %>
+      <%= vite_stylesheet_tag "application.css" %>
+    <% end %>
     <%= vite_react_refresh_tag %>
     <%= vite_client_tag %>
     <%= vite_typescript_tag "inertia" %>

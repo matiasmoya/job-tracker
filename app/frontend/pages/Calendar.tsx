@@ -72,9 +72,9 @@ const EventComponent = ({ event }: { event: CalendarEvent }) => {
   return (
     <div className={cn(
       "text-xs p-1 rounded-sm border-l-2",
-      isInterview && "bg-primary/10 border-primary text-primary-foreground",
-      isTask && "bg-muted border-muted-foreground text-muted-foreground",
-      isTask && event.data.completed && "bg-success/10 border-success text-success-foreground",
+      isInterview && "bg-primary/10 border-primary text-foreground",
+      isTask && "bg-muted border-muted-foreground text-foreground",
+      isTask && event.data.completed && "bg-success/10 border-success text-muted-foreground",
       isTask && event.data.overdue && "bg-destructive/10 border-destructive text-destructive-foreground"
     )}>
       <div className="font-medium truncate">{event.title}</div>

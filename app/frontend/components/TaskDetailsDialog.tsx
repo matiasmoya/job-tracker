@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import { router } from '@inertiajs/react'
+import { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -39,7 +38,11 @@ export default function TaskDetailsDialog({
   onUpdated,
 }: TaskDetailsDialogProps) {
   const [saving, setSaving] = useState(false)
-  const [localCompleted, setLocalCompleted] = useState(taskData?.completed ?? false)
+  const [localCompleted, setLocalCompleted] = useState(false)
+
+  useEffect(() => {
+    setLocalCompleted(!!taskData?.completed)
+  }, [taskData?.task_id])
 
   if (!taskData) return null
 
@@ -107,7 +110,7 @@ export default function TaskDetailsDialog({
           <Separator />
 
           <div className="flex items-center gap-3">
-            <Checkbox id="completed" checked={localCompleted} onCheckedChange={onToggleCompleted} disabled={saving} />
+            <Checkbox id="completed" checked={!!localCompleted} onCheckedChange={onToggleCompleted} disabled={saving} />
             <label htmlFor="completed" className="text-sm leading-none">
               Mark as completed
             </label>

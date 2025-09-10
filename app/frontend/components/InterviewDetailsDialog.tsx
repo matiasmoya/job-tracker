@@ -93,7 +93,7 @@ export default function InterviewDetailsDialog({
                 <span className="font-medium">Position:</span>
                 <Link 
                   href={`/jobs?job_id=${interviewData.job_opening_id}`}
-                  className="text-primary hover:text-primary/80 underline-offset-4 hover:underline inline-flex items-center gap-1"
+                  className="text-primary underline hover:text-primary/80 underline-offset-4 hover:underline inline-flex items-center gap-1"
                   onClick={handleJobClick}
                 >
                   {interviewData.job_title}
