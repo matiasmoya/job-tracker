@@ -33,7 +33,7 @@ class JobsController < ApplicationController
                 "application_processes.created_at AS ap_created_at",
                 "application_processes.updated_at AS ap_updated_at"
               )
-              .order("job_openings.updated_at DESC")
+              .order("application_processes.updated_at DESC")
 
     @companies = Company.order(:name)                               # (Could cache)
     @contacts  = Contact.includes(:company).order(:name)            # 1 (contacts) + 1 (companies) query
@@ -355,7 +355,7 @@ class JobsController < ApplicationController
           id: iv.id,
           round_number: iv.round_number,
           interview_type: iv.interview_type,
-          scheduled_at: iv.scheduled_at.strftime("%B %d, %Y at %I:%M %p"),
+          scheduled_at: iv.scheduled_at.iso8601,
           duration: iv.duration_display,
           performance_score: iv.performance_score,
           enjoyment_score: iv.enjoyment_score,

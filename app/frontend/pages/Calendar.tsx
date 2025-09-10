@@ -1,8 +1,11 @@
 import { useState, useMemo } from 'react'
+import { Head } from '@inertiajs/react'
 import { Calendar, momentLocalizer, View, Views } from 'react-big-calendar'
 import moment from 'moment'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import '@/assets/calendar.css'
+import AppLayout from '@/components/AppLayout'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -298,103 +301,109 @@ export default function CalendarPage({ events, current_date }: CalendarPageProps
   ]
   
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
-          <p className="text-muted-foreground">
-            View and manage your interviews and tasks
-          </p>
-        </div>
-        <div className="flex gap-2">
-          {viewButtons.map(({ view: viewType, label }) => (
-            <Button
-              key={viewType}
-              variant={view === viewType ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setView(viewType)}
-            >
-              {label}
-            </Button>
-          ))}
-        </div>
-      </div>
-      
-      <Separator />
-      
-      <Card>
-        <CardContent className="p-6">
-          {view === 'agenda' ? (
-            <AgendaView 
-              events={formattedEvents} 
-              currentDate={currentDate} 
-              onEventClick={handleEventSelect}
-            />
-          ) : (
-            <div style={{ height: '700px' }}>
-              <Calendar
-                localizer={localizer}
-                events={formattedEvents}
-                startAccessor="start"
-                endAccessor="end"
-                titleAccessor="title"
-                view={view}
-                onView={setView}
-                date={currentDate}
-                onNavigate={setCurrentDate}
-                onSelectEvent={handleEventSelect}
-                eventPropGetter={eventStyleGetter}
-                components={{
-                  event: EventComponent,
-                }}
-                formats={formats}
-                className="rbc-calendar-custom"
-                popup
-                showMultiDayTimes
-                step={60}
-                timeslots={1}
-              />
+    <ThemeProvider defaultTheme="system" storageKey="job-tracker-theme">
+      <AppLayout>
+        <Head title="Calendar" />
+        
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-3xl font-bold tracking-tight">Calendar</h1>
+              <p className="text-muted-foreground">
+                View and manage your interviews and tasks
+              </p>
             </div>
-          )}
-        </CardContent>
-      </Card>
-      
-      <div className="flex gap-4 text-sm">
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-primary"></div>
-          <span>Interviews</span>
+            <div className="flex gap-2">
+              {viewButtons.map(({ view: viewType, label }) => (
+                <Button
+                  key={viewType}
+                  variant={view === viewType ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setView(viewType)}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+          </div>
+          
+          <Separator />
+          
+          <Card>
+            <CardContent className="p-6">
+              {view === 'agenda' ? (
+                <AgendaView 
+                  events={formattedEvents} 
+                  currentDate={currentDate} 
+                  onEventClick={handleEventSelect}
+                />
+              ) : (
+                <div style={{ height: '700px' }}>
+                  <Calendar
+                    localizer={localizer}
+                    events={formattedEvents}
+                    startAccessor="start"
+                    endAccessor="end"
+                    titleAccessor="title"
+                    view={view}
+                    onView={setView}
+                    date={currentDate}
+                    onNavigate={setCurrentDate}
+                    onSelectEvent={handleEventSelect}
+                    eventPropGetter={eventStyleGetter}
+                    components={{
+                      event: EventComponent,
+                    }}
+                    formats={formats}
+                    className="rbc-calendar-custom"
+                    popup
+                    showMultiDayTimes
+                    step={60}
+                    timeslots={1}
+                  />
+                </div>
+              )}
+            </CardContent>
+          </Card>
+          
+          <div className="flex gap-4 text-sm">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-sm bg-primary"></div>
+              <span>Interviews</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-sm bg-muted-foreground"></div>
+              <span>Tasks</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-sm bg-green-600"></div>
+              <span>Completed</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-sm bg-destructive"></div>
+              <span>Overdue</span>
+            </div>
+          </div>
+          
+          {/* Dialogs */}
+          <InterviewDetailsDialog
+            open={interviewDialogOpen}
+            onOpenChange={setInterviewDialogOpen}
+            interviewData={selectedInterviewData}
+          />
+          
+          <TaskDetailsDialog
+            open={taskDialogOpen}
+            onOpenChange={setTaskDialogOpen}
+            taskData={selectedTaskData}
+            onUpdated={(updates) => {
+              if (selectedTaskData) {
+                handleTaskUpdate(selectedTaskData.task_id, updates)
+              }
+            }}
+          />
         </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-muted-foreground"></div>
-          <span>Tasks</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-green-600"></div>
-          <span>Completed</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded-sm bg-destructive"></div>
-          <span>Overdue</span>
-        </div>
-      </div>
-      
-      {/* Dialogs */}
-      <InterviewDetailsDialog
-        open={interviewDialogOpen}
-        onOpenChange={setInterviewDialogOpen}
-        interviewData={selectedInterviewData}
-      />
-      
-      <TaskDetailsDialog
-        open={taskDialogOpen}
-        onOpenChange={setTaskDialogOpen}
-        taskData={selectedTaskData}
-        onUpdated={(updates) => {
-          if (selectedTaskData) {
-            handleTaskUpdate(selectedTaskData.task_id, updates)
-          }
-        }}
-      />
-    </div>
+      </AppLayout>
+    </ThemeProvider>
   )
 }

@@ -1,6 +1,6 @@
 class Message < ApplicationRecord
   belongs_to :contact
-  belongs_to :application_process
+  belongs_to :application_process, touch: true
   has_one :company, through: :contact
   has_one :job_opening, through: :application_process
 

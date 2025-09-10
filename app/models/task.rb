@@ -1,7 +1,7 @@
 class Task < ApplicationRecord
   # Associations
   belongs_to :user
-  belongs_to :application_process, optional: true
+  belongs_to :application_process, optional: true, touch: true
 
   # Validations
   validates :title, presence: true, length: { maximum: 255 }

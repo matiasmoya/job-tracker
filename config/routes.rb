@@ -13,7 +13,7 @@ Rails.application.routes.draw do
       post :toggle_task
     end
     resources :messages, only: [ :create ]
-    resources :interviews, only: [ :create ]
+    resources :interviews, only: [ :create, :update, :destroy ]
     resources :tasks, only: [ :create ]
   end
 

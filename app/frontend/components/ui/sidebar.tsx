@@ -23,12 +23,31 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-const SIDEBAR_COOKIE_NAME = "sidebar_state"
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+const SIDEBAR_STORAGE_KEY = "sidebar_state"
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
+
+// Helper functions for localStorage
+function getSidebarState(): boolean {
+  if (typeof window === "undefined") return true
+  try {
+    const stored = window.localStorage.getItem(SIDEBAR_STORAGE_KEY)
+    return stored !== null ? JSON.parse(stored) : true
+  } catch {
+    return true
+  }
+}
+
+function setSidebarState(open: boolean): void {
+  if (typeof window === "undefined") return
+  try {
+    window.localStorage.setItem(SIDEBAR_STORAGE_KEY, JSON.stringify(open))
+  } catch {
+    // Ignore localStorage errors
+  }
+}
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed"
@@ -67,9 +86,11 @@ function SidebarProvider({
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = React.useState(defaultOpen)
+  // Initialize from localStorage or use defaultOpen
+  const [_open, _setOpen] = React.useState(() => {
+    return openProp !== undefined ? openProp : getSidebarState()
+  })
+  
   const open = openProp ?? _open
   const setOpen = React.useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
@@ -80,8 +101,8 @@ function SidebarProvider({
         _setOpen(openState)
       }
 
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+      // Save the sidebar state to localStorage
+      setSidebarState(openState)
     },
     [setOpenProp, open]
   )
@@ -90,6 +111,33 @@ function SidebarProvider({
   const toggleSidebar = React.useCallback(() => {
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen, setOpenMobile])
+
+  // Sync with localStorage changes across tabs
+  React.useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === SIDEBAR_STORAGE_KEY && e.newValue !== null && !openProp) {
+        try {
+          const newOpen = JSON.parse(e.newValue)
+          _setOpen(newOpen)
+        } catch {
+          // Ignore parsing errors
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [openProp])
+
+  // Initialize from localStorage on client-side (for SSR compatibility)
+  React.useEffect(() => {
+    if (openProp === undefined) {
+      const storedState = getSidebarState()
+      if (storedState !== _open) {
+        _setOpen(storedState)
+      }
+    }
+  }, [openProp, _open])
 
   // Adds a keyboard shortcut to toggle the sidebar.
   React.useEffect(() => {

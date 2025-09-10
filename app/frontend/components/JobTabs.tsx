@@ -8,6 +8,7 @@ import { MessageSquare, Calendar, CheckSquare, User, Expand } from 'lucide-react
 import DOMPurify from 'dompurify'
 import MessageDetailsDialog from '@/components/MessageDetailsDialog'
 import MessagesExpandedSheet from '@/components/MessagesExpandedSheet'
+import InterviewEditSheet from '@/components/InterviewEditSheet'
 
 interface Company {
   id: number
@@ -131,6 +132,7 @@ const createActivityItems = (job: Job) => {
 export default function JobTabs({ job }: JobTabsProps) {
   const [messageDialogOpen, setMessageDialogOpen] = React.useState(false)
   const [messagesSheetOpen, setMessagesSheetOpen] = React.useState(false)
+  const [interviewEditSheetOpen, setInterviewEditSheetOpen] = React.useState(false)
   const [selectedMessage, setSelectedMessage] = React.useState<null | {
     id: number
     content: string
@@ -142,6 +144,7 @@ export default function JobTabs({ job }: JobTabsProps) {
     contact_linkedin_url?: string | null
     short_content: string
   }>(null)
+  const [selectedInterview, setSelectedInterview] = React.useState<Interview | null>(null)
 
   const openMessageDialog = (message: Message) => {
     setSelectedMessage({
@@ -156,6 +159,11 @@ export default function JobTabs({ job }: JobTabsProps) {
       short_content: message.short_content,
     })
     setMessageDialogOpen(true)
+  }
+  
+  const openInterviewEditSheet = (interview: Interview) => {
+    setSelectedInterview(interview)
+    setInterviewEditSheetOpen(true)
   }
   const handleTaskToggle = (taskId: number) => {
     router.post(`/jobs/${job.id}/toggle_task`, { task_id: taskId }, {
@@ -352,7 +360,12 @@ export default function JobTabs({ job }: JobTabsProps) {
               {job.interviews && job.interviews.length > 0 ? (
                 <div className="space-y-3">
                   {job.interviews.map((interview) => (
-                    <div key={interview.id} className="border-l-2 border-muted pl-4 py-2">
+                    <button
+                      key={interview.id}
+                      type="button"
+                      className="w-full text-left border-l-2 border-muted pl-4 py-2 hover:bg-muted/50 rounded-sm transition-colors"
+                      onClick={() => openInterviewEditSheet(interview)}
+                    >
                       <div className="flex items-center justify-between">
                         <div>
                           <span className="text-sm font-medium">
@@ -376,7 +389,7 @@ export default function JobTabs({ job }: JobTabsProps) {
                       {interview.notes && (
                         <p className="text-sm text-muted-foreground mt-1">{interview.notes}</p>
                       )}
-                    </div>
+                    </button>
                   ))}
                 </div>
               ) : (
@@ -463,6 +476,14 @@ export default function JobTabs({ job }: JobTabsProps) {
         messages={job.messages || []}
         jobTitle={job.title}
         companyName={job.company.name}
+      />
+
+      {/* Interview Edit Sheet */}
+      <InterviewEditSheet
+        open={interviewEditSheetOpen}
+        onOpenChange={setInterviewEditSheetOpen}
+        interview={selectedInterview}
+        jobId={job.id}
       />
     </Tabs>
   )
