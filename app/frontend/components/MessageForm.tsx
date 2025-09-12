@@ -62,7 +62,7 @@ export default function MessageForm({ jobId, applicationProcessId, contacts, onC
     setIsSubmitting(true)
     
     const submitData = {
-      message: {
+      direct_message: {
         content: formData.content,
         direction: formData.direction,
         contact_id: parseInt(formData.contact_id),
@@ -70,7 +70,7 @@ export default function MessageForm({ jobId, applicationProcessId, contacts, onC
       }
     }
     
-    router.post(`/jobs/${jobId}/messages`, submitData, {
+    router.post(`/jobs/${jobId}/direct_messages`, submitData, {
       onSuccess: () => {
         setFormData({
           content: '',

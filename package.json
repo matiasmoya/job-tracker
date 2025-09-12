@@ -3,6 +3,7 @@
   "type": "module",
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.16",
+    "@vitejs/plugin-react": "^5.0.2",
     "tailwindcss-animate": "^1.0.7",
     "tw-animate-css": "^1.3.8",
     "vite": "^7.1.4",
@@ -44,7 +45,6 @@
     "@types/node": "^24.3.1",
     "@types/react": "^19.1.12",
     "@types/react-dom": "^19.1.9",
-    "@vitejs/plugin-react": "^5.0.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",

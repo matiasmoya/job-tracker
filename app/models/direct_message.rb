@@ -1,4 +1,4 @@
-class Message < ApplicationRecord
+class DirectMessage < ApplicationRecord
   belongs_to :contact
   belongs_to :application_process, touch: true
   has_one :company, through: :contact

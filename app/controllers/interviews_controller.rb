@@ -1,6 +1,6 @@
 class InterviewsController < ApplicationController
   before_action :find_job
-  before_action :find_interview, only: [:update, :destroy]
+  before_action :find_interview, only: [ :update, :destroy ]
 
   def create
     @interview = @job.application_process.interviews.build(interview_params)
