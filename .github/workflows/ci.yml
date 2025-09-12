@@ -88,6 +88,17 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Build Vite assets
+        run: bin/vite build --clear --mode=test
+
       - name: Run tests
         env:
           RAILS_ENV: test
@@ -121,11 +132,23 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install JS dependencies
+        run: npm ci
+
+      - name: Build Vite assets
+        run: bin/vite build --clear --mode=test
+
       - name: Run System Tests
         env:
           RAILS_ENV: test
-          # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
-          # REDIS_URL: redis://localhost:6379/0
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: jobtracker_test
         run: bin/rails db:test:prepare test:system
 
       - name: Keep screenshots from failed system tests
