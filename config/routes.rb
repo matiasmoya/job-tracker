@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       patch :status, to: "jobs#update_status"
       post :toggle_task
     end
-    resources :messages, only: [ :create ]
+  resources :direct_messages, only: [ :create ]
     resources :interviews, only: [ :create, :update, :destroy ]
     resources :tasks, only: [ :create ]
   end

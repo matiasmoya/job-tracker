@@ -42,14 +42,14 @@ class JobsController < ApplicationController
     @selected_job = nil
 
     if selected_job_id
-      # Heavy load only for the selected job (isolated; uses joins for messages.contacts to cut queries)
+      # Heavy load only for the selected job (isolated; uses joins for direct_messages.contacts to cut queries)
       @selected_job = JobOpening
         .where(id: selected_job_id)
         .eager_load( # eager_load -> single LEFT OUTER JOIN tree; fine for 1 record
           :company,
           :contacts,
           application_process: [
-            { messages: :contact },
+    { direct_messages: :contact },
             :tasks,
             :interviews
           ]
@@ -327,7 +327,7 @@ class JobsController < ApplicationController
           company_id: contact.company_id
         }
       },
-      messages: (ap&.messages || []).sort_by(&:sent_at).map { |m|
+  messages: (ap&.direct_messages || []).sort_by(&:sent_at).map { |m|
         {
           id: m.id,
           content: m.content,

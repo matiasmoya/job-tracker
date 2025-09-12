@@ -47,7 +47,7 @@ class ApplicationProcessTest < ActiveSupport::TestCase
   end
 
   test "should have many messages" do
-    assert_respond_to @application_process, :messages
+    assert_respond_to @application_process, :direct_messages
   end
 
   test "should have company through job_opening" do

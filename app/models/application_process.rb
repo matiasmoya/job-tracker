@@ -1,7 +1,7 @@
 class ApplicationProcess < ApplicationRecord
   belongs_to :job_opening
   has_many :interviews, dependent: :destroy
-  has_many :messages, dependent: :destroy
+  has_many :direct_messages, dependent: :destroy
   has_many :tasks, dependent: :destroy
   has_one :company, through: :job_opening
 

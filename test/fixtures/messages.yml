@@ -1,22 +1,3 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-initial_recruiter_outreach:
-  contact: john_recruiter
-  application_process: tech_corp_application
-  direction: sent
-  content: "Hi John, thanks for reaching out about the position."
-  sent_at: <%= 3.days.ago %>
-
-recruiter_reply:
-  contact: john_recruiter
-  application_process: tech_corp_application
-  direction: received
-  content: "Thanks for your interest, let's schedule a call."
-  sent_at: <%= 2.days.ago %>
-
-manager_follow_up:
-  contact: sarah_manager
-  application_process: innovate_labs_application
-  direction: sent
-  content: "Following up on the Full Stack Engineer role application."
-  sent_at: <%= 1.day.ago %>
+---
+# Deprecated: moved to direct_messages.yml
+# Keeping this file empty to avoid duplicate fixture inserts during tests.

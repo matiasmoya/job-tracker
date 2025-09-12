@@ -1,11 +1,11 @@
 require "test_helper"
 
-class MessageTest < ActiveSupport::TestCase
+class DirectMessageTest < ActiveSupport::TestCase
   def setup
     @application_process = application_processes(:tech_corp_application)
     @application_process.status = "applied"
     @contact = contacts(:john_recruiter)
-    @message = Message.new(
+  @message = DirectMessage.new(
       application_process: @application_process,
       contact: @contact,
       direction: "sent",
@@ -34,7 +34,7 @@ class MessageTest < ActiveSupport::TestCase
   end
 
   test "directions class method" do
-    assert_equal({ "sent" => 0, "received" => 1 }, Message.directions)
+  assert_equal({ "sent" => 0, "received" => 1 }, DirectMessage.directions)
   end
 
   test "display_direction" do
@@ -54,14 +54,14 @@ class MessageTest < ActiveSupport::TestCase
 
   test "scopes recent and ordering" do
     @message.save!
-    assert_includes Message.recent, @message
-    assert Message.ordered_by_date.first.sent_at <= Message.ordered_by_date.last.sent_at
+  assert_includes DirectMessage.recent, @message
+  assert DirectMessage.ordered_by_date.first.sent_at <= DirectMessage.ordered_by_date.last.sent_at
   end
 
   test "scopes sent and received" do
     @message.save!
-    assert_includes Message.sent_messages, @message
+  assert_includes DirectMessage.sent_messages, @message
     @message.update!(direction: "received")
-    assert_includes Message.received_messages, @message
+  assert_includes DirectMessage.received_messages, @message
   end
 end
