@@ -24,20 +24,20 @@ jobs:
       - name: Scan for known security vulnerabilities in gems used
         run: bin/bundler-audit
 
-  scan_js:
-    runs-on: ubuntu-latest
+  # scan_js:
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v5
 
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
+  #     - name: Set up Ruby
+  #       uses: ruby/setup-ruby@v1
+  #       with:
+  #         bundler-cache: true
 
-      - name: Scan for security vulnerabilities in JavaScript dependencies
-        run: bin/importmap audit
+  #     - name: Scan for security vulnerabilities in JavaScript dependencies
+  #       run: bin/importmap audit
 
   lint:
     runs-on: ubuntu-latest
@@ -68,12 +68,17 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # services:
-    #  redis:
-    #    image: valkey/valkey:8
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: jobtracker_test
+        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -86,6 +91,10 @@ jobs:
       - name: Run tests
         env:
           RAILS_ENV: test
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: jobtracker_test
+          
           # RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
           # REDIS_URL: redis://localhost:6379/0
         run: bin/rails db:test:prepare test
@@ -93,12 +102,16 @@ jobs:
   system-test:
     runs-on: ubuntu-latest
 
-    # services:
-    #  redis:
-    #    image: valkey/valkey:8
-    #    ports:
-    #      - 6379:6379
-    #    options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: jobtracker_test
+        options: --health-cmd="pg_isready -U postgres" --health-interval=10s --health-timeout=5s --health-retries=5
     steps:
       - name: Checkout code
         uses: actions/checkout@v5

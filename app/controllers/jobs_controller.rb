@@ -49,7 +49,7 @@ class JobsController < ApplicationController
           :company,
           :contacts,
           application_process: [
-    { direct_messages: :contact },
+          { direct_messages: :contact },
             :tasks,
             :interviews
           ]
@@ -327,7 +327,7 @@ class JobsController < ApplicationController
           company_id: contact.company_id
         }
       },
-  messages: (ap&.direct_messages || []).sort_by(&:sent_at).map { |m|
+      messages: (ap&.direct_messages || []).sort_by(&:sent_at).map { |m|
         {
           id: m.id,
           content: m.content,

@@ -28,7 +28,7 @@ class ContactTest < ActiveSupport::TestCase
 
   test "associations" do
     assert_instance_of Company, @contact.company
-  assert_respond_to @contact, :direct_messages
+    assert_respond_to @contact, :direct_messages
   end
 
   test "scopes" do
